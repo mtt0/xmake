@@ -332,6 +332,7 @@ end
 -- load the given toolchain 
 function toolchain.load(name)
 
+    print("toolchain.load", name)
     -- get it directly from cache dirst
     toolchain._TOOLCHAINS = toolchain._TOOLCHAINS or {}
     if toolchain._TOOLCHAINS[name] then

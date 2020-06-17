@@ -1750,6 +1750,8 @@ end
 -- get tool configuration from the toolchains
 function _instance:toolconfig(name)
 
+    print("----------------------------------")
+    print("toolconfig", name)
     -- init tool configs
     local toolconfigs = self._TOOLCONFIGS
     if not toolconfigs then
@@ -1764,6 +1766,7 @@ function _instance:toolconfig(name)
         -- get them from all toolchains
         for _, toolchain_inst in ipairs(self:toolchains()) do
             local values = toolchain_inst:get(name)
+        print("target.toolconfig", toolchain_inst:name(), name, values)
             if values then
                 toolconfig = toolconfig or {}
                 table.join2(toolconfig, values)

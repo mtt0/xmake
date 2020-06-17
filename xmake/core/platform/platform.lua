@@ -211,6 +211,7 @@ function _instance:toolconfig(name)
         self._TOOLCONFIGS = toolconfigs
     end
 
+    print("----")
     -- get configuration
     local toolconfig = toolconfigs[name]
     if toolconfig == nil then
@@ -218,6 +219,7 @@ function _instance:toolconfig(name)
         -- get them from all toolchains
         for _, toolchain_inst in ipairs(self:toolchains()) do
             local values = toolchain_inst:get(name)
+        print("platform inst.toolconfig", toolchain_inst:name(), name, values)
             if values then
                 toolconfig = toolconfig or {}
                 table.join2(toolconfig, values)
@@ -512,6 +514,7 @@ function platform.tool(toolkind, plat)
 
         -- get it from the platform toolchains
         program, toolname = instance:tool(toolkind)
+        print("platform.tool %s %s %s", instance:name(), toolkind, program)
         if program then
             config.set(toolkind, program, {force = true, readonly = true})
             config.set("__toolname_" .. toolkind, toolname)
@@ -534,6 +537,7 @@ end
 function platform.toolconfig(name, plat)
     local instance, errors = platform.load(plat)
     if instance then
+        print("platform.toolconfig", instance:name(), name, plat)
         return instance:toolconfig(name)
     else
         os.raise(errors)
