@@ -125,10 +125,13 @@ function _instance:toolchains(opt)
     local toolchains = self._TOOLCHAINS
     if not toolchains then
 
+        print("666666")
+
         -- get current valid toolchains from configuration cache
         local names = nil
         toolchains = {}
         if not (opt and opt.all) then
+        print("666666: 1")
             names = config.get("__toolchains")
         else
             -- get the given toolchain
@@ -145,14 +148,18 @@ function _instance:toolchains(opt)
                 table.insert(toolchains, toolchain_inst)
                 toolchain_given = toolchain_inst
             end
+        print("666666: 2", toolchain_given)
 
             -- get the platform toolchains
             if (not toolchain_given or not toolchain_given:standalone()) and self._INFO:get("toolchains") then
                 names = self._INFO:get("toolchains")
             end
         end
+        print("666666: names", names)
         if names then
+            print("names len", #names)
             for _, name in ipairs(names) do
+                print("ssss load", name)
                 local toolchain_inst, errors = toolchain.load(name)
                 -- attempt to load toolchain from project
                 if not toolchain_inst and platform._project() then
@@ -211,10 +218,12 @@ function _instance:toolconfig(name)
         self._TOOLCONFIGS = toolconfigs
     end
 
-    print("----")
+    print("----------- platform:toolconfig --", name)
     -- get configuration
     local toolconfig = toolconfigs[name]
     if toolconfig == nil then
+
+        print("sssssssssssss")
 
         -- get them from all toolchains
         for _, toolchain_inst in ipairs(self:toolchains()) do
@@ -230,6 +239,7 @@ function _instance:toolconfig(name)
         toolconfig = toolconfig or false
         toolconfigs[name] = toolconfig
     end
+    print("----------- platform:toolconfig end --", name)
     return toolconfig or nil
 end
 
@@ -420,6 +430,7 @@ function platform.load(plat)
 
     -- get platform name
     plat = plat or config.get("plat") or os.host()
+    print("platform.load", plat)
     if not plat then
         return nil, string.format("unknown platform!")
     end
@@ -536,6 +547,7 @@ end
 -- get the given tool configuration 
 function platform.toolconfig(name, plat)
     local instance, errors = platform.load(plat)
+    print("platform.toolconfig load end", instance)
     if instance then
         print("platform.toolconfig", instance:name(), name, plat)
         return instance:toolconfig(name)

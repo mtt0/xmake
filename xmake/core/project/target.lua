@@ -1672,6 +1672,7 @@ end
 function _instance:toolchains()
     local toolchains = self._TOOLCHAINS
     if toolchains == nil then
+        print("target toolchains load ..")
         local instance, errors = platform.load()
         if not instance then
             os.raise(errors)
@@ -1679,6 +1680,7 @@ function _instance:toolchains()
         toolchains = instance:toolchains()
         self._TOOLCHAINS = toolchains
     end
+    print("target:toolchains", toolchains and #toolchains or 0)
     return toolchains
 end
 
@@ -1751,7 +1753,7 @@ end
 function _instance:toolconfig(name)
 
     print("----------------------------------")
-    print("toolconfig", name)
+    print("target:toolconfig", name)
     -- init tool configs
     local toolconfigs = self._TOOLCONFIGS
     if not toolconfigs then
@@ -1763,10 +1765,12 @@ function _instance:toolconfig(name)
     local toolconfig = toolconfigs[name]
     if toolconfig == nil then
 
+        print("aaaaaaaaaaa")
+
         -- get them from all toolchains
         for _, toolchain_inst in ipairs(self:toolchains()) do
             local values = toolchain_inst:get(name)
-        print("target.toolconfig", toolchain_inst:name(), name, values)
+        print("target.toolconfig get", toolchain_inst:name(), name, values)
             if values then
                 toolconfig = toolconfig or {}
                 table.join2(toolconfig, values)
@@ -1777,6 +1781,7 @@ function _instance:toolconfig(name)
         toolconfig = toolconfig or false
         toolconfigs[name] = toolconfig
     end
+        print("target end")
     return toolconfig or nil
 end
 
