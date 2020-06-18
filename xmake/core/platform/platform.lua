@@ -133,7 +133,8 @@ function _instance:toolchains(opt)
         if not (opt and opt.all) then
         print("666666: 1")
             names = config.get("__toolchains")
-        else
+        end
+        if not names then
             -- get the given toolchain
             local toolchain_given = config.get("toolchain")
             if toolchain_given then
